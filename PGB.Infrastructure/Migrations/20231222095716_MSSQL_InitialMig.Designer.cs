@@ -12,8 +12,8 @@ using PGB.Infrastructure.Data;
 namespace PGB.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlServerDBC))]
-    [Migration("20231220225750_InitialMig")]
-    partial class InitialMig
+    [Migration("20231222095716_MSSQL_InitialMig")]
+    partial class MSSQL_InitialMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,9 +49,6 @@ namespace PGB.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -68,26 +65,24 @@ namespace PGB.Infrastructure.Migrations
 
             modelBuilder.Entity("PGB.Domain.Entities.Book", b =>
                 {
-                    b.Property<int>("BookId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BookOrderId")
+                    b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BookReturnId")
+                    b.Property<int?>("BookOrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("BookId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BookOrderId");
-
-                    b.HasIndex("BookReturnId");
 
                     b.ToTable("Book");
                 });
@@ -99,6 +94,9 @@ namespace PGB.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpectedReturnDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -114,7 +112,7 @@ namespace PGB.Infrastructure.Migrations
                     b.ToTable("BookOrders");
                 });
 
-            modelBuilder.Entity("PGB.Domain.Entities.BookReturn", b =>
+            modelBuilder.Entity("PGB.Domain.Entities.UserOrder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -122,15 +120,18 @@ namespace PGB.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("OrdersInCurrentMonth")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookReturns");
+                    b.ToTable("UserOrders");
                 });
 
             modelBuilder.Entity("PGB.Domain.Entities.UserPenalty", b =>
@@ -149,7 +150,7 @@ namespace PGB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("userPenalties");
+                    b.ToTable("UserPenalties");
                 });
 
             modelBuilder.Entity("PGB.Domain.Entities.Book", b =>
@@ -157,18 +158,9 @@ namespace PGB.Infrastructure.Migrations
                     b.HasOne("PGB.Domain.Entities.BookOrder", null)
                         .WithMany("Books")
                         .HasForeignKey("BookOrderId");
-
-                    b.HasOne("PGB.Domain.Entities.BookReturn", null)
-                        .WithMany("Books")
-                        .HasForeignKey("BookReturnId");
                 });
 
             modelBuilder.Entity("PGB.Domain.Entities.BookOrder", b =>
-                {
-                    b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("PGB.Domain.Entities.BookReturn", b =>
                 {
                     b.Navigation("Books");
                 });

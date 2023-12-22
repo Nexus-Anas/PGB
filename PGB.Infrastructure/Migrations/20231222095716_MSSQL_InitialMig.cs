@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PGB.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMig : Migration
+    public partial class MSSQL_InitialMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,6 @@ namespace PGB.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -48,6 +47,7 @@ namespace PGB.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpectedReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -56,21 +56,22 @@ namespace PGB.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookReturns",
+                name: "UserOrders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    OrdersInCurrentMonth = table.Column<int>(type: "int", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookReturns", x => x.Id);
+                    table.PrimaryKey("PK_UserOrders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "userPenalties",
+                name: "UserPenalties",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -80,31 +81,26 @@ namespace PGB.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_userPenalties", x => x.Id);
+                    table.PrimaryKey("PK_UserPenalties", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Book",
                 columns: table => new
                 {
-                    BookId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    BookOrderId = table.Column<int>(type: "int", nullable: true),
-                    BookReturnId = table.Column<int>(type: "int", nullable: true)
+                    BookOrderId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Book", x => x.BookId);
+                    table.PrimaryKey("PK_Book", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Book_BookOrders_BookOrderId",
                         column: x => x.BookOrderId,
                         principalTable: "BookOrders",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Book_BookReturns_BookReturnId",
-                        column: x => x.BookReturnId,
-                        principalTable: "BookReturns",
                         principalColumn: "Id");
                 });
 
@@ -112,11 +108,6 @@ namespace PGB.Infrastructure.Migrations
                 name: "IX_Book_BookOrderId",
                 table: "Book",
                 column: "BookOrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Book_BookReturnId",
-                table: "Book",
-                column: "BookReturnId");
         }
 
         /// <inheritdoc />
@@ -132,13 +123,13 @@ namespace PGB.Infrastructure.Migrations
                 name: "Book");
 
             migrationBuilder.DropTable(
-                name: "userPenalties");
+                name: "UserOrders");
+
+            migrationBuilder.DropTable(
+                name: "UserPenalties");
 
             migrationBuilder.DropTable(
                 name: "BookOrders");
-
-            migrationBuilder.DropTable(
-                name: "BookReturns");
         }
     }
 }

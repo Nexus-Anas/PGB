@@ -1,8 +1,9 @@
-﻿namespace PGB.Domain.Entities;
+﻿using PGB.Domain.Entities;
 
-public class BookReturn
+namespace PGB.Application.DTOs.BookOrderDTO;
+
+public class BookOrderPutDTO
 {
-    public int Id { get; set; }
     public int UserId { get; set; }
     public IEnumerable<Book> Books { get; set; }
     public DateTime ReturnDate { get; set; }

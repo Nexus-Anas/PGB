@@ -1,4 +1,6 @@
-﻿namespace PGB.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PGB.Domain.Entities;
 
 public class UserPenalty
 {
