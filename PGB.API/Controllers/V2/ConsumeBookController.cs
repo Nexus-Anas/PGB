@@ -1,16 +1,14 @@
-﻿using Flurl.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PGB.API.InterfacesApi;
 using PGB.API.ModelsApi;
 using Polly;
 using Refit;
-using System.Net.Http;
 
-namespace PGB.API.Controllers;
+namespace PGB.API.Controllers.V2;
 
-[Route("api/[controller]")]
+[Route("api/V2/[controller]")]
 [ApiController]
-public class ConsumeBookController : ControllerBase
+public class ConsumeBookController : ApiControllerBase
 {
     private readonly IBookApi _bookApi;
     private readonly HttpClient _httpClient;
@@ -37,23 +35,6 @@ public class ConsumeBookController : ControllerBase
         catch (ApiException ex)
         {
             return StatusCode((int)ex.StatusCode, "The book service returned an error.");
-        }
-    }
-
-    [HttpGet("Flurl/{id}")]
-    public async Task<IActionResult> GetWithFlurl(int id)
-    {
-        string bookApiBaseUrl = "https://localhost:44305/api";
-        try
-        {
-            var book = await $"{bookApiBaseUrl}/Book/{id}"
-                .GetJsonAsync<Book>();
-
-            return Ok(book);
-        }
-        catch (FlurlHttpException ex)
-        {
-            return StatusCode(ex.Call.Response.StatusCode, "The book service returned an error.");
         }
     }
 
