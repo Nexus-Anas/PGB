@@ -75,6 +75,7 @@ public class BookOrderService : IBookOrderService
     {
         bookOrder.OrderDate = DateTime.Now;
         bookOrder.ExpectedReturnDate = DateTime.Now.AddDays(7);
+        bookOrder.ReturnDate = null;
         return await _bookOrderRepository.PostAsync(bookOrder);
     }
 }

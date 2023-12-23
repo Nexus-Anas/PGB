@@ -1,3 +1,4 @@
+using PGB.API;
 using PGB.Application;
 using PGB.Infrastructure;
 
@@ -5,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddHttpClientServices();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

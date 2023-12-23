@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace PGB.Application;
 
-public static class ConfigureService
+public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {

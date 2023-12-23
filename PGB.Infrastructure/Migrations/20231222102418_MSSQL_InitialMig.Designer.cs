@@ -12,7 +12,7 @@ using PGB.Infrastructure.Data;
 namespace PGB.Infrastructure.Migrations
 {
     [DbContext(typeof(SqlServerDBC))]
-    [Migration("20231222095716_MSSQL_InitialMig")]
+    [Migration("20231222102418_MSSQL_InitialMig")]
     partial class MSSQL_InitialMig
     {
         /// <inheritdoc />
@@ -101,7 +101,7 @@ namespace PGB.Infrastructure.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ReturnDate")
+                    b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")

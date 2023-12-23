@@ -25,7 +25,7 @@ public class BookOrderRepository : IBookOrderRepository
         return await Task.FromResult(bookOrder.Books);
     }
 
-    public async Task<DateTime> PutAsync(BookOrder bookOrder)
+    public async Task<DateTime?> PutAsync(BookOrder bookOrder)
     {
         var order = await FindLastOrder(bookOrder.UserId);
         if (order is not null)
