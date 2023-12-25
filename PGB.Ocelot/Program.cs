@@ -11,6 +11,8 @@ builder.Services.AddOcelot(builder.Configuration)
     {
         x.WithDictionaryHandle();
     });
+builder.Services.AddHealthChecks();
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -29,6 +31,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseHealthChecks("/health");
 app.MapControllers();
 
 app.UseOcelot().Wait();

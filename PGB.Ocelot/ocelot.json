@@ -16,7 +16,14 @@
       ],
       "FileCacheOptions": {
         "TtlSeconds": 10
-      }
+      },
+      "HealthChecks": [
+        {
+          "Key": "BookAPI",
+          "Timeout": 5000,
+          "Uri": "/health"
+        }
+      ]
     },
     {
       "UpstreamPathTemplate": "/gateway/V2/ConsumeBook/Refit/{id}",
@@ -34,7 +41,14 @@
         "Period": "10s",
         "PeriodTimespan": 10,
         "Limit": 3
-      }
+      },
+      "HealthChecks": [
+        {
+          "Key": "ConsumeBookAPI",
+          "Timeout": 5000,
+          "Uri": "/health"
+        }
+      ]
     }
   ]
 }
