@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PGB.Domain", "PGB.Domain\PG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PGB.Infrastructure", "PGB.Infrastructure\PGB.Infrastructure.csproj", "{81C92B68-FF89-4D3F-9E40-99C2FBB5C5C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PGB.TestApiBooks", "PGB.TestApiBooks\PGB.TestApiBooks.csproj", "{51DA4422-2240-46EE-97C7-25CC17BDD0F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PGB.Ocelot", "PGB.Ocelot\PGB.Ocelot.csproj", "{3993FF54-16E8-4861-B58C-C7DAEF2DBEDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{81C92B68-FF89-4D3F-9E40-99C2FBB5C5C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81C92B68-FF89-4D3F-9E40-99C2FBB5C5C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81C92B68-FF89-4D3F-9E40-99C2FBB5C5C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51DA4422-2240-46EE-97C7-25CC17BDD0F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51DA4422-2240-46EE-97C7-25CC17BDD0F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51DA4422-2240-46EE-97C7-25CC17BDD0F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51DA4422-2240-46EE-97C7-25CC17BDD0F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3993FF54-16E8-4861-B58C-C7DAEF2DBEDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3993FF54-16E8-4861-B58C-C7DAEF2DBEDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3993FF54-16E8-4861-B58C-C7DAEF2DBEDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3993FF54-16E8-4861-B58C-C7DAEF2DBEDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

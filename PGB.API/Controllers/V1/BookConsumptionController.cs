@@ -11,7 +11,7 @@ public class BookConsumptionController : ApiControllerBase
     [HttpGet("Flurl/{id}")]
     public async Task<IActionResult> GetWithFlurl(int id)
     {
-        string bookApiBaseUrl = "https://localhost:44305/api";
+        string bookApiBaseUrl = "https://localhost:44349/api";
         try
         {
             var book = await $"{bookApiBaseUrl}/Book/{id}"

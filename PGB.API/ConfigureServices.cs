@@ -22,7 +22,7 @@ public static class ConfigureServices
         //Http client
         var httpClient = new HttpClient()
         {
-            BaseAddress = new Uri("https://localhost:44305/api/") // this is the address of the temperature service
+            BaseAddress = new Uri("https://localhost:44349/api/")
         };
         services.AddSingleton(httpClient);
 
@@ -30,7 +30,7 @@ public static class ConfigureServices
         //Refit
         services.AddHttpClient<IBookApi>(http =>
         {
-            http.BaseAddress = new Uri("https://localhost:44305/api");
+            http.BaseAddress = new Uri("https://localhost:44349/api");
         })
             .AddTypedClient(RestService.For<IBookApi>);
 
