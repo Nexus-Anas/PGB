@@ -10,9 +10,37 @@ public class UserOrderRepository : IUserOrderRepository
     private readonly IDBC _db;
     public UserOrderRepository(IDBC db) => _db = db;
 
-    public async Task<bool> BlockOrder(int id)
+
+
+
+    public async Task<UserOrder?> Find(int user_id)
     {
-        var userOrder = await _db.UserOrders.FindAsync(id);
+        var userOrder = await _db.UserOrders.FirstOrDefaultAsync(x => x.UserId == user_id);
+        return userOrder;
+    }
+
+    public async Task<bool> AddUserOrder(UserOrder userOrder)
+    {
+        await _db.UserOrders.AddAsync(userOrder);
+        await _db.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> RemoveUserOrder(int user_id)
+    {
+        var user = await Find(user_id);
+
+        if (user is not null)
+        {
+            _db.UserOrders.Remove(user);
+            await _db.SaveChangesAsync();
+        }
+        return true;
+    }
+
+    public async Task<bool> BlockUserOrder(int user_id)
+    {
+        var userOrder = await Find(user_id);
         if (userOrder is not null)
         {
             userOrder.EndDate = DateTime.Now.AddMonths(1);
@@ -21,16 +49,10 @@ public class UserOrderRepository : IUserOrderRepository
         return true;
     }
 
-    public async Task<UserOrder?> GetAsync(int id)
-    {
-        var userOrder = await _db.UserOrders.FindAsync(id);
-        return userOrder;
-    }
-
-    public async Task<int> IncrementOrderBlockAsync(int id)
+    public async Task<int> IncrementOrderInCurrentMonth(int user_id)
     {
         int value = 0;
-        var userOrder = await _db.UserOrders.FindAsync(id);
+        var userOrder = await Find(user_id);
         if (userOrder is not null)
         {
             userOrder.OrdersInCurrentMonth++;
@@ -38,24 +60,5 @@ public class UserOrderRepository : IUserOrderRepository
             await _db.SaveChangesAsync();
         }
         return value;
-    }
-
-    public async Task<bool> PostOrderBlockAsync(UserOrder userOrder)
-    {
-        await _db.UserOrders.AddAsync(userOrder);
-        await _db.SaveChangesAsync();
-        return true;
-    }
-
-    public async Task<bool> RemoveOrderBlockAsync(int id)
-    {
-        var user = await _db.UserOrders.FindAsync(id);
-
-        if (user is not null)
-        {
-            _db.UserOrders.Remove(user);
-            await _db.SaveChangesAsync();
-        }
-        return true;
     }
 }

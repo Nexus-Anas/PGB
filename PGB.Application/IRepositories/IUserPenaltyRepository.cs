@@ -4,8 +4,8 @@ namespace PGB.Application.IRepositories;
 
 public interface IUserPenaltyRepository
 {
-    Task<bool> PostPenaltyAsync(UserPenalty userPenalty);
-    Task<bool> RemovePenaltyAsync(int user_id);
-    Task<bool> IncrementPenaltyAsync(int user_id);
-    Task<int> CountPenaltyAsync(int user_id);
+    Task<bool> AddUserPenalty(UserPenalty userPenalty);
+    Task<bool> RemoveUserPenalty(int user_id);
+    Task<int> IncrementUserPenalty(int user_id);
+    Task<int> CountPenalties(int user_id);
 }

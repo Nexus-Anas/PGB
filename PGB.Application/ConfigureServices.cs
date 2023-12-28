@@ -20,7 +20,7 @@ public static class ConfigureServices
         });
 
         //Services
-        services.AddScoped<IBookOrderService, BookOrderService>();
+        services.AddScoped<IRegisterBookOrderService, RegisterBookOrderService>();
 
 
         return services;

@@ -4,7 +4,7 @@ namespace PGB.Application.IRepositories;
 
 public interface IBannedUserRepository
 {
-    Task<bool> BanAsync(BannedUser banned);
-    Task<bool> UnbanAsync(BannedUser banned);
-    Task<BannedUser> GetAsync(int user_id);
+    Task<BannedUser?> Find(int user_id);
+    Task<bool> Ban(BannedUser banned);
+    Task<bool> Unban(BannedUser banned);
 }

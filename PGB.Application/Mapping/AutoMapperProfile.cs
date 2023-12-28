@@ -14,5 +14,6 @@ public class AutoMapperProfile : Profile
 
         //BookOrder mapping
         CreateMap<BookOrderPostDTO, BookOrder>();
+        CreateMap<BookOrderPutDTO, BookOrder>();
     }
 }

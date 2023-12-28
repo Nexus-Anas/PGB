@@ -10,37 +10,43 @@ public class UserPenaltyRepository : IUserPenaltyRepository
     private readonly IDBC _db;
     public UserPenaltyRepository(IDBC db) => _db = db;
 
-    public async Task<int> CountPenaltyAsync(int user_id)
-    {
-        var user = await _db.UserPenalties.FindAsync(user_id);
-        if (user is null)
-            return 0;
-        return user.PenaltiesInCurrentTrimester;
-    }
 
-    public async Task<bool> IncrementPenaltyAsync(int user_id)
-    {
-        var penalty = await _db.UserPenalties.FindAsync(user_id);
-        penalty.PenaltiesInCurrentTrimester++;
-        return true;
-    }
 
-    public async Task<bool> PostPenaltyAsync(UserPenalty userPenalty)
+
+    public async Task<bool> AddUserPenalty(UserPenalty userPenalty)
     {
         await _db.UserPenalties.AddAsync(userPenalty);
         await _db.SaveChangesAsync();
         return true;
     }
 
-    public async Task<bool> RemovePenaltyAsync(int user_id)
+    public async Task<bool> RemoveUserPenalty(int user_id)
     {
-        var user = await _db.UserPenalties.FirstOrDefaultAsync(u => u.UserId == user_id);
-
-        if (user is not null)
+        var penalty = await _db.UserPenalties.FirstOrDefaultAsync(u => u.UserId == user_id);
+        if (penalty is not null)
         {
-            _db.UserPenalties.Remove(user);
+            _db.UserPenalties.Remove(penalty);
             await _db.SaveChangesAsync();
         }
         return true;
+    }
+
+    public async Task<int> IncrementUserPenalty(int user_id)
+    {
+        int value = 0;
+        var penalty = await _db.UserPenalties.FirstOrDefaultAsync(u => u.UserId == user_id);
+        if (penalty is not null)
+        {
+            penalty.PenaltiesInCurrentTrimester++;
+            value = penalty.PenaltiesInCurrentTrimester;
+            await _db.SaveChangesAsync();
+        }
+        return value;
+    }
+
+    public async Task<int> CountPenalties(int user_id)
+    {
+        var penalty = await _db.UserPenalties.FirstOrDefaultAsync(u => u.UserId == user_id);
+        return (penalty is not null) ? penalty.PenaltiesInCurrentTrimester : 0;
     }
 }
