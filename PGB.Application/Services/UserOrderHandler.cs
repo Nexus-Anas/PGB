@@ -12,27 +12,6 @@ public class UserOrderHandler : IUserOrderHandler
 
 
 
-    //public async Task<bool> RegisterNewUserOrder(BookOrder bookOrder)
-    //{
-    //    var userOrder = new UserOrder(bookOrder.UserId);
-    //    await _uow.UserOrderRepository.AddUserOrder(userOrder);
-    //    await _uow.BookOrderRepository.Add(bookOrder);
-
-    //    return true;
-    //}
-
-    //public async Task<bool> RegisterExistingUserOrder(BookOrder bookOrder)
-    //{
-    //    var userOrder = await _uow.UserOrderRepository.Find(bookOrder.UserId);
-    //    userOrder.TryIncrementOrdersInCurrentMonth();
-    //    userOrder.TryBlockUserOrdersForOneMonth();
-
-    //    await _uow.UserOrderRepository.UpdateUserOrder(userOrder);
-    //    await _uow.BookOrderRepository.Add(bookOrder);
-
-    //    return true;
-    //}
-
     public async Task<bool> SaveUserOrder(BookOrder bookOrder)
     {
         var userOrder = await _uow.UserOrderRepository.Find(bookOrder.UserId);
@@ -46,6 +25,7 @@ public class UserOrderHandler : IUserOrderHandler
             await _uow.UserOrderRepository.AddUserOrder(new UserOrder(bookOrder.UserId));
 
         await _uow.BookOrderRepository.AddBookOrder(bookOrder);
+        await _uow.CompleteAsync();
         return true;
     }
 }

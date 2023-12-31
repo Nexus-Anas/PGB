@@ -22,18 +22,13 @@ public class BannedUserInfoRepository : IBannedUserInfoRepository
     public async Task<bool> AddBannedUserInfos(BannedUserInfo bannedUserInfo)
     {
         await _db.BannedUserInfos.AddAsync(bannedUserInfo);
-        await _db.SaveChangesAsync();
         return true;
     }
 
     public async Task<bool> Update(BannedUserInfo bannedUserInfo)
     {
         var userInfo = await Find(bannedUserInfo.UserId);
-        if (userInfo is not null)
-        {
-            userInfo.BanUserForOneYear();
-            await _db.SaveChangesAsync();
-        }
+        userInfo?.BanUserForOneYear();
         return true;
     }
 }

@@ -8,5 +8,5 @@ public interface IUnitOfWork : IDisposable
     IBannedUserInfoRepository BannedUserInfoRepository { get; }
     IUserPenaltyRepository UserPenaltyRepository { get; }
 
-    Task<int> CommitAsync();
+    Task<int> CompleteAsync();
 }

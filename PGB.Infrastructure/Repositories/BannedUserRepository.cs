@@ -22,7 +22,6 @@ public class BannedUserRepository : IBannedUserRepository
     public async Task<bool> Ban(BannedUser bannedUser)
     {
         await _db.BannedUsers.AddAsync(bannedUser);
-        await _db.SaveChangesAsync();
         return true;
     }
 
@@ -32,7 +31,6 @@ public class BannedUserRepository : IBannedUserRepository
         if (user is not null)
         {
             _db.BannedUsers.Remove(user);
-            await _db.SaveChangesAsync();
             return true;
         }
         return false;

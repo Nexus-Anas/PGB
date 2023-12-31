@@ -16,18 +16,16 @@ public class UserPenaltyRepository : IUserPenaltyRepository
     public async Task<bool> AddUserPenalty(UserPenalty userPenalty)
     {
         await _db.UserPenalties.AddAsync(userPenalty);
-        await _db.SaveChangesAsync();
         return true;
     }
 
     public async Task<bool> RemoveUserPenalty(int user_id)
     {
         var penalty = await _db.UserPenalties.FirstOrDefaultAsync(u => u.UserId == user_id);
+
         if (penalty is not null)
-        {
             _db.UserPenalties.Remove(penalty);
-            await _db.SaveChangesAsync();
-        }
+
         return true;
     }
 
