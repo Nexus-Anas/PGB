@@ -15,4 +15,8 @@
     <ProjectReference Include="..\PGB.Domain\PGB.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BookOrders\Queries\" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PGB.Application.Models.BookOrder.Command.RegisterBookOrder;
+using PGB.Application.BookOrders.Commands;
+using PGB.Application.DTOs.BookDTO;
 
 namespace PGB.API.Controllers.V2;
 
@@ -7,10 +8,41 @@ namespace PGB.API.Controllers.V2;
 [ApiController]
 public class BookOrderController : ApiControllerBase
 {
-    [HttpPost]
-    public async Task<IActionResult> RegisterBookOrder(RegisterBookOrderCmd cmd)
+    private IEnumerable<BookGetDTO>? _orderedBooks;
+    private IEnumerable<BookGetDTO>? _returnedBooks;
+    
+    
+    [HttpPost("RegisterBookOrder")]
+    public async Task<IActionResult> RegisterBookOrder(RegisterBookOrderCommand cmd)
     {
-        var bookOrder = await Mediator.Send(cmd);
-        return Ok(bookOrder);
+        var result = await Mediator.Send(cmd);
+        var message = result.Msg;
+        _orderedBooks = result.Books;
+        return Ok(message);
+    }
+
+
+    [HttpPost("ReturnBookOrder")]
+    public async Task<IActionResult> ReturnBookOrder(ReturnBookOrderCommand cmd)
+    {
+        var result = await Mediator.Send(cmd);
+        var message = result.Msg;
+        _returnedBooks = result.Books;
+        return Ok(message);
+    }
+
+
+
+    [HttpGet("GetOrderedBooks")]
+    public async Task<IActionResult> GetOrderedBooks()
+    {
+        return Ok(_orderedBooks);
+    }
+
+
+    [HttpGet("GetReturnedBooks")]
+    public async Task<IActionResult> GetReturnedBooks()
+    {
+        return Ok(_returnedBooks);
     }
 }
