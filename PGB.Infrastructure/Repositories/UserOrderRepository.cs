@@ -22,7 +22,6 @@ public class UserOrderRepository : IUserOrderRepository
     public async Task<bool> AddUserOrder(UserOrder userOrder)
     {
         await _db.UserOrders.AddAsync(userOrder);
-        await _db.SaveChangesAsync();
         return true;
     }
 
@@ -31,20 +30,14 @@ public class UserOrderRepository : IUserOrderRepository
         var user = await Find(user_id);
 
         if (user is not null)
-        {
             _db.UserOrders.Remove(user);
-            await _db.SaveChangesAsync();
-        }
+
         return true;
     }
 
     public async Task UpdateUserOrder(UserOrder userOrder)
     {
         var user = await Find(userOrder.UserId);
-        if (user is not null)
-        {
-            user.Update(userOrder.OrdersInCurrentMonth, userOrder.EndDate);
-            await _db.SaveChangesAsync();
-        }
+        user?.Update(userOrder.OrdersInCurrentMonth, userOrder.EndDate);
     }
 }

@@ -22,7 +22,6 @@ public class BookOrderRepository : IBookOrderRepository
     public async Task<bool> AddBookOrder(BookOrder bookOrder)
     {
         await _db.BookOrders.AddAsync(bookOrder);
-        await _db.SaveChangesAsync();
         return true;
     }
 
@@ -32,7 +31,6 @@ public class BookOrderRepository : IBookOrderRepository
         if (order is not null)
         {
             order.SetReturnDate();
-            await _db.SaveChangesAsync();
             return order.ReturnDate;
         }
         return default;

@@ -26,6 +26,8 @@ public class UserRestrictionHandler : IUserRestrictionHandler
             await AddPenaltyAndBanUser(userId);
         else if (userPenalties < Restriction.MaxPenaltyByTrimester)
             await IncrementPenaltyAndCheckLimit(userId);
+
+        await _uow.CompleteAsync();
     }
 
     private async Task AddPenaltyAndBanUser(int userId)
@@ -37,6 +39,8 @@ public class UserRestrictionHandler : IUserRestrictionHandler
             _uow.BannedUserInfoRepository.AddBannedUserInfos(bannedUserInfo),
             _uow.UserPenaltyRepository.AddUserPenalty(new UserPenalty(userId))
         );
+
+        await _uow.CompleteAsync();
     }
 
     private async Task IncrementPenaltyAndCheckLimit(int userId)
@@ -52,5 +56,7 @@ public class UserRestrictionHandler : IUserRestrictionHandler
                 _uow.BannedUserInfoRepository.Update(bannedUserInfo)
             );
         }
+
+        await _uow.CompleteAsync();
     }
 }
