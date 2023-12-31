@@ -31,7 +31,7 @@ public class BannedUserInfoRepository : IBannedUserInfoRepository
         var userInfo = await Find(bannedUserInfo.UserId);
         if (userInfo is not null)
         {
-            userInfo.EndDate = DateTime.Now.AddYears(1);
+            userInfo.BanUserForOneYear();
             await _db.SaveChangesAsync();
         }
         return true;

@@ -1,5 +1,6 @@
 ﻿using PGB.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace PGB.Infrastructure.Data;
 
@@ -12,4 +13,5 @@ public interface IDBC
     DbSet<UserOrder> UserOrders { get; set; }
 
     Task<int> SaveChangesAsync();
+    Task Dispose();
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PGB.Application.DTOs.BookDTO;
 using PGB.Application.DTOs.BookOrderDTO;
 using PGB.Application.Interfaces;
 using PGB.Application.IRepositories;
@@ -10,78 +11,36 @@ namespace PGB.Application.Services;
 public class RegisterBookOrderService : IRegisterBookOrderService
 {
     private readonly IMapper _mapper;
-    private readonly IBookOrderRepository _bookOrderRepository;
-    private readonly IUserOrderRepository _userOrderRepository;
-    private readonly IBannedUserRepository _bannedUserRepository;
+    private readonly IUnitOfWork _uow;
+    private readonly IUserOrderHandler _userOrderHandler;
+    private readonly IUserRestrictionHandler _userRestrictionHandler;
 
-    public RegisterBookOrderService(IMapper mapper, IBookOrderRepository bookOrderRepository, IUserOrderRepository userOrderRepository, IBannedUserRepository bannedUserRepository)
+    public RegisterBookOrderService(IMapper mapper, IUnitOfWork uow, IUserOrderHandler userOrderHandler, IUserRestrictionHandler userRestrictionHandler)
     {
         _mapper = mapper;
-        _bookOrderRepository = bookOrderRepository;
-        _userOrderRepository = userOrderRepository;
-        _bannedUserRepository = bannedUserRepository;
+        _uow = uow;
+        _userOrderHandler = userOrderHandler;
+        _userRestrictionHandler = userRestrictionHandler;
     }
 
 
 
 
-    public async Task<(bool, string)> RegisterBookOrder(BookOrderPostDTO bookOrderPostDTO)
+
+    public async Task<(IEnumerable<BookGetDTO>, string)> RegisterBookOrder(BookOrderPostDTO bookOrderPostDTO)
     {
+        if (await _userRestrictionHandler.IsUserRestricted(bookOrderPostDTO.UserId))
+            return (Enumerable.Empty<BookGetDTO>(), CustomMessage.UserRestricted());
+
         var bookOrder = _mapper.Map<BookOrder>(bookOrderPostDTO);
-        int user_id = bookOrder.UserId;
 
-        if (await IsUserBanned(user_id))
-            return (false, CustomMessage.UserRestricted(user_id));
+        var userOrder = await _uow.UserOrderRepository.Find(bookOrder.UserId);
 
-        var user = await _userOrderRepository.Find(user_id);
+        if (userOrder is not null && !userOrder.CanPlaceOrder())
+            return (Enumerable.Empty<BookGetDTO>(), CustomMessage.MaxOrderReached());
 
-        if (user is not null && user.OrdersInCurrentMonth == Restriction.MaxOrderByMonth)
-            return (false, CustomMessage.MaxOrderReached(user_id));
-
-        if (user is null)
-            return (await RegisterNewUserOrder(bookOrder), CustomMessage.InformBookOrder(user_id));
-
-        return (await RegisterExistingUserOrder(user, bookOrder), CustomMessage.InformBookOrder(user_id));
-    }
-
-
-
-
-
-    private async Task<bool> IsUserBanned(int userId)
-    {
-        var bannedUser = await _bannedUserRepository.Find(userId);
-        return bannedUser is not null;
-    }
-
-    private async Task<bool> RegisterNewUserOrder(BookOrder bookOrder)
-    {
-        var userOrder = new UserOrder { UserId = bookOrder.UserId, OrdersInCurrentMonth = 1, EndDate = null };
-        await _userOrderRepository.AddUserOrder(userOrder);
-
-        return await RegisterBookOrderDetails(bookOrder);
-    }
-
-    private async Task<bool> RegisterExistingUserOrder(UserOrder user, BookOrder bookOrder)
-    {
-        int value = await _userOrderRepository.IncrementOrderInCurrentMonth(user.UserId);
-
-        var bookOrderState = await RegisterBookOrderDetails(bookOrder);
-
-        if (value == Restriction.MaxOrderByMonth)
-        {
-            var state = await _userOrderRepository.BlockUserOrder(user.UserId);
-            return state;
-        }
-
-        return bookOrderState;
-    }
-
-    private async Task<bool> RegisterBookOrderDetails(BookOrder bookOrder)
-    {
-        bookOrder.OrderDate = DateTime.Now;
-        bookOrder.ExpectedReturnDate = DateTime.Now.AddDays(7);
-        bookOrder.ReturnDate = null;
-        return await _bookOrderRepository.Add(bookOrder);
+        return await _userOrderHandler.SaveUserOrder(bookOrder)
+            ? (bookOrderPostDTO.Books, CustomMessage.InformBookOrder())
+            : (Enumerable.Empty<BookGetDTO>(), CustomMessage.ErrorOccurred());
     }
 }

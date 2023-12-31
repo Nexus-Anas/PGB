@@ -38,27 +38,13 @@ public class UserOrderRepository : IUserOrderRepository
         return true;
     }
 
-    public async Task<bool> BlockUserOrder(int user_id)
+    public async Task UpdateUserOrder(UserOrder userOrder)
     {
-        var userOrder = await Find(user_id);
-        if (userOrder is not null)
+        var user = await Find(userOrder.UserId);
+        if (user is not null)
         {
-            userOrder.EndDate = DateTime.Now.AddMonths(1);
+            user.Update(userOrder.OrdersInCurrentMonth, userOrder.EndDate);
             await _db.SaveChangesAsync();
         }
-        return true;
-    }
-
-    public async Task<int> IncrementOrderInCurrentMonth(int user_id)
-    {
-        int value = 0;
-        var userOrder = await Find(user_id);
-        if (userOrder is not null)
-        {
-            userOrder.OrdersInCurrentMonth++;
-            value = userOrder.OrdersInCurrentMonth;
-            await _db.SaveChangesAsync();
-        }
-        return value;
     }
 }

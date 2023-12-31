@@ -10,7 +10,7 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         //Book mapping
-        CreateMap<BookPostDTO, Book>();
+        CreateMap<Book, BookGetDTO>();
 
         //BookOrder mapping
         CreateMap<BookOrderPostDTO, BookOrder>();

@@ -6,5 +6,5 @@ namespace PGB.Application.DTOs.BookOrderDTO;
 public class BookOrderPostDTO
 {
     public int UserId { get; set; }
-    public IEnumerable<BookPostDTO> Books { get; set; }
+    public IEnumerable<BookGetDTO> Books { get; set; }
 }

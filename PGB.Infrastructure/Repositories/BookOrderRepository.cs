@@ -13,32 +13,32 @@ public class BookOrderRepository : IBookOrderRepository
 
 
 
-    public async Task<BookOrder?> FindLastOrder(int user_id)
+    public async Task<BookOrder?> FindLastBookOrder(int user_id)
     {
         var order = await _db.BookOrders.LastOrDefaultAsync(x => x.UserId == user_id);
         return order;
     }
 
-    public async Task<bool> Add(BookOrder bookOrder)
+    public async Task<bool> AddBookOrder(BookOrder bookOrder)
     {
         await _db.BookOrders.AddAsync(bookOrder);
         await _db.SaveChangesAsync();
         return true;
     }
 
-    public async Task<DateTime?> Update(BookOrder bookOrder)
+    public async Task<DateTime?> UpdateBookOrder(BookOrder bookOrder)
     {
-        var order = await FindLastOrder(bookOrder.UserId);
+        var order = await FindLastBookOrder(bookOrder.UserId);
         if (order is not null)
         {
-            order.ReturnDate = DateTime.Now;
+            order.SetReturnDate();
             await _db.SaveChangesAsync();
             return order.ReturnDate;
         }
         return default;
     }
 
-    public async Task<IEnumerable<Book>> GetOrder(BookOrder bookOrder)
+    public async Task<IEnumerable<Book>> GetBooks(BookOrder bookOrder)
     {
         return await Task.FromResult(bookOrder.Books);
     }

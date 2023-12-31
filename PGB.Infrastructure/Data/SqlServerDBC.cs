@@ -19,4 +19,7 @@ public class SqlServerDBC : DbContext, IDBC
 
     public async Task<int> SaveChangesAsync()
         => await base.SaveChangesAsync();
+
+    public async Task Dispose()
+        => await base.DisposeAsync();
 }
