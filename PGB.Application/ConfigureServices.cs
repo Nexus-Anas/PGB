@@ -21,7 +21,9 @@ public static class ConfigureServices
 
         //Services
         services.AddScoped<IRegisterBookOrderService, RegisterBookOrderService>();
-
+        services.AddScoped<IReturnBookOrderService, ReturnBookOrderService>();
+        services.AddScoped<IUserOrderHandler, UserOrderHandler>();
+        services.AddScoped<IUserRestrictionHandler, UserRestrictionHandler>();
 
         return services;
     }

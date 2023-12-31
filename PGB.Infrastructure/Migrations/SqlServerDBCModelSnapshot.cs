@@ -10,7 +10,7 @@ using PGB.Infrastructure.Data;
 
 namespace PGB.Infrastructure.Migrations
 {
-    [DbContext(typeof(SqlServerDBC))]
+    [DbContext(typeof(MSSQL_DBC))]
     partial class SqlServerDBCModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

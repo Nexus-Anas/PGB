@@ -3,9 +3,9 @@ using PGB.Domain.Entities;
 
 namespace PGB.Infrastructure.Data;
 
-public class SqlServerDBC : DbContext, IDBC
+public class MYSQL_DBC : DbContext, IDBC
 {
-    public SqlServerDBC(DbContextOptions<SqlServerDBC> options) : base(options)
+    public MYSQL_DBC(DbContextOptions<MYSQL_DBC> options) : base(options)
     {
 
     }

@@ -15,15 +15,11 @@ public static class ConfigureServices
         string? mssql_con = configuration.GetConnectionString("mssql_con");
         string? mysql_con = configuration.GetConnectionString("mysql_con");
 
-        services.AddDbContext<IDBC, SqlServerDBC>(op => op.UseSqlServer(mssql_con));
-        //services.AddDbContext<IDBC, MySqlDBC>(op => op.UseMySql(mysql_con, ServerVersion.Parse("10.4.28-mariadb")));
+        services.AddDbContext<IDBC, MSSQL_DBC>(op => op.UseSqlServer(mssql_con));
+        services.AddDbContext<IDBC, MYSQL_DBC>(op => op.UseMySql(mysql_con, ServerVersion.Parse("10.4.28-mariadb")));
 
         //Repositories
-        services.AddScoped<IBannedUserInfoRepository, BannedUserInfoRepository>();
-        services.AddScoped<IBannedUserRepository, BannedUserRepository>();
-        services.AddScoped<IBookOrderRepository, BookOrderRepository>();
-        services.AddScoped<IUserOrderRepository, UserOrderRepository>();
-        services.AddScoped<IUserPenaltyRepository, UserPenaltyRepository>();
+       services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

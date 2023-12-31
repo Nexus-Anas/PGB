@@ -1,10 +1,20 @@
+using Microsoft.AspNetCore.Diagnostics;
 using PGB.API.InterfacesApi;
+using PGB.API.Middlewares;
 using PGB.Application;
 using PGB.Infrastructure;
 using Polly;
 using Refit;
+using Serilog;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Serilog setup
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("Logs/app_logs.txt", rollingInterval: RollingInterval.Day)
+    .MinimumLevel.Information()
+    .CreateLogger();
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
@@ -38,12 +48,23 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseExceptionHandler(op => op.Run(
+    async context =>
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        var ex = context.Features.Get<IExceptionHandlerFeature>();
+        if (ex is not null)
+            await context.Response.WriteAsync(ex.Error.Message);
+    }));
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
