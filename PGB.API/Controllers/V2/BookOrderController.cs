@@ -3,11 +3,10 @@ using PGB.Application.BookOrders.Commands;
 using PGB.Application.DTOs.BookDTO;
 using Serilog;
 using System.Net;
-using static System.Net.WebRequestMethods;
 
 namespace PGB.API.Controllers.V2;
 
-[Route("api/[controller]")]
+[Route("api/V2/[controller]")]
 [ApiController]
 public class BookOrderController : ApiControllerBase
 {
