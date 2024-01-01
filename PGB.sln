@@ -25,7 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BC90BDCD-D82
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api simulation", "api simulation", "{D1CCDD12-9DCB-40B5-96C5-95580EF01C89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication.API", "Authentication.API\Authentication.API.csproj", "{CF70A471-ED13-4759-A007-F16D2008347E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authentication.API", "Authentication.API\Authentication.API.csproj", "{CF70A471-ED13-4759-A007-F16D2008347E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Api", "Catalogue.Api\Catalogue.Api.csproj", "{A7CA2C9D-4942-4DAF-B4FC-83222373969D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{CF70A471-ED13-4759-A007-F16D2008347E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF70A471-ED13-4759-A007-F16D2008347E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF70A471-ED13-4759-A007-F16D2008347E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7CA2C9D-4942-4DAF-B4FC-83222373969D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7CA2C9D-4942-4DAF-B4FC-83222373969D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7CA2C9D-4942-4DAF-B4FC-83222373969D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7CA2C9D-4942-4DAF-B4FC-83222373969D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{F2EDC3F8-B768-4E65-AEB1-CBD37F177179} = {BA653427-FE30-4FBA-9BA2-8F186C903B70}
 		{9D6E1F17-9009-4C09-B7CD-21C2BFE8309A} = {BA653427-FE30-4FBA-9BA2-8F186C903B70}
 		{CF70A471-ED13-4759-A007-F16D2008347E} = {D1CCDD12-9DCB-40B5-96C5-95580EF01C89}
+		{A7CA2C9D-4942-4DAF-B4FC-83222373969D} = {D1CCDD12-9DCB-40B5-96C5-95580EF01C89}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD1CC300-14DA-487E-ACD3-9DBEB48B350F}

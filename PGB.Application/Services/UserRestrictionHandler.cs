@@ -34,11 +34,9 @@ public class UserRestrictionHandler : IUserRestrictionHandler
     {
         var bannedUserInfo = new BannedUserInfo(userId);
 
-        await Task.WhenAll(
-            _uow.BannedUserRepository.Ban(new BannedUser(userId)),
-            _uow.BannedUserInfoRepository.AddBannedUserInfos(bannedUserInfo),
-            _uow.UserPenaltyRepository.AddUserPenalty(new UserPenalty(userId))
-        );
+        await _uow.BannedUserRepository.Ban(new BannedUser(userId));
+        await _uow.BannedUserInfoRepository.AddBannedUserInfos(bannedUserInfo);
+        await _uow.UserPenaltyRepository.AddUserPenalty(new UserPenalty(userId));
 
         await _uow.CompleteAsync();
     }
@@ -50,11 +48,9 @@ public class UserRestrictionHandler : IUserRestrictionHandler
         if (userPenaltyValue == Restriction.MaxPenaltyByTrimester)
         {
             var bannedUserInfo = new BannedUserInfo(userId);
-            await Task.WhenAll(
-                _uow.BannedUserRepository.Ban(new BannedUser(userId)),
-                _uow.BannedUserInfoRepository.AddBannedUserInfos(bannedUserInfo),
-                _uow.BannedUserInfoRepository.Update(bannedUserInfo)
-            );
+            bannedUserInfo.BanUserForOneYear();
+            await _uow.BannedUserRepository.Ban(new BannedUser(userId));
+            await _uow.BannedUserInfoRepository.AddBannedUserInfos(bannedUserInfo);
         }
 
         await _uow.CompleteAsync();

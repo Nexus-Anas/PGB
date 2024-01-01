@@ -15,7 +15,7 @@ public class BannedUserRepository : IBannedUserRepository
 
     public async Task<BannedUser?> Find(int user_id)
     {
-        var user = await _db.BannedUsers.SingleOrDefaultAsync(x => x.UserId == user_id);
+        BannedUser? user = await _db.BannedUsers.SingleOrDefaultAsync(x => x.UserId == user_id);
         return user;
     }
 

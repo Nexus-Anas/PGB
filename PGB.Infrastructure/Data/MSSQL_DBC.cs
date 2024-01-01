@@ -22,4 +22,5 @@ public class MSSQL_DBC : DbContext, IDBC
 
     public async Task Dispose()
         => await base.DisposeAsync();
+
 }

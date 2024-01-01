@@ -15,20 +15,13 @@ public class BannedUserInfoRepository : IBannedUserInfoRepository
 
     public async Task<BannedUserInfo?> Find(int user_id)
     {
-        var bannedUserInfo = await _db.BannedUserInfos.LastOrDefaultAsync(u => u.UserId == user_id);
+        var bannedUserInfo = await _db.BannedUserInfos.OrderByDescending(x => x.Id).FirstOrDefaultAsync(u => u.UserId == user_id);
         return bannedUserInfo;
     }
 
     public async Task<bool> AddBannedUserInfos(BannedUserInfo bannedUserInfo)
     {
         await _db.BannedUserInfos.AddAsync(bannedUserInfo);
-        return true;
-    }
-
-    public async Task<bool> Update(BannedUserInfo bannedUserInfo)
-    {
-        var userInfo = await Find(bannedUserInfo.UserId);
-        userInfo?.BanUserForOneYear();
         return true;
     }
 }

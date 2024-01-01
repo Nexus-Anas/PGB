@@ -6,5 +6,4 @@ public interface IBannedUserInfoRepository
 {
     Task<BannedUserInfo?> Find(int user_id);
     Task<bool> AddBannedUserInfos(BannedUserInfo bannedUserInfo);
-    Task<bool> Update(BannedUserInfo bannedUserInfo);
 }
