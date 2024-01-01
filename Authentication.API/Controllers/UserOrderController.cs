@@ -1,5 +1,6 @@
 ﻿using Authentication.API.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace Authentication.API.Controllers;
 
@@ -7,17 +8,39 @@ namespace Authentication.API.Controllers;
 [ApiController]
 public class UserOrderController : ControllerBase
 {
-    [HttpGet("{id}")]
-    public IActionResult Get(int id)
-    {
-        var books = new List<Book>()
-        {
-            new Book() { BookId = 1, Quantity = 1},
-            new Book() { BookId = 5, Quantity = 2},
-            new Book() { BookId = 11, Quantity = 1}
-        };
-        var userOrder = new UserOrder { UserId = id, Books = books };
+    private readonly HttpClient _http;
+    public UserOrderController(IHttpClientFactory httpClientFactory)
+        => _http = httpClientFactory.CreateClient();
 
-        return Ok(userOrder);
+
+
+
+    [HttpPost("Send Order")]
+    public async Task<IActionResult> SendOrder([FromBody] UserOrder order)
+    {
+        var response = await SendOrderToHandlerApi(order);
+        return Ok(response);
+    }
+
+    [HttpPost("Return Order")]
+    public async Task<IActionResult> ReturnOrder([FromBody] UserOrder order)
+    {
+        var response = await ReturnOrderToHandlerApi(order);
+        return Ok(response);
+    }
+
+
+    private async Task<string> SendOrderToHandlerApi(UserOrder order)
+    {
+        var handlerApiUrl = "https://localhost:44359/api/BookOrder/RegisterBookOrder";
+        var response = await _http.PostAsJsonAsync(handlerApiUrl, order);
+        return await response.Content.ReadAsStringAsync();
+    }
+
+    private async Task<string> ReturnOrderToHandlerApi(UserOrder order)
+    {
+        var handlerApiUrl = "https://localhost:44359/api/BookOrder/ReturnBookOrder";
+        var response = await _http.PostAsJsonAsync(handlerApiUrl, order);
+        return await response.Content.ReadAsStringAsync();
     }
 }

@@ -15,7 +15,7 @@ public class BookOrderRepository : IBookOrderRepository
 
     public async Task<BookOrder?> FindLastBookOrder(int user_id)
     {
-        var order = await _db.BookOrders.LastOrDefaultAsync(x => x.UserId == user_id);
+        var order = await _db.BookOrders.OrderByDescending(o => o.ExpectedReturnDate).FirstOrDefaultAsync(x => x.UserId == user_id);
         return order;
     }
 
@@ -23,17 +23,6 @@ public class BookOrderRepository : IBookOrderRepository
     {
         await _db.BookOrders.AddAsync(bookOrder);
         return true;
-    }
-
-    public async Task<DateTime?> UpdateBookOrder(BookOrder bookOrder)
-    {
-        var order = await FindLastBookOrder(bookOrder.UserId);
-        if (order is not null)
-        {
-            order.SetReturnDate();
-            return order.ReturnDate;
-        }
-        return default;
     }
 
     public async Task<IEnumerable<Book>> GetBooks(BookOrder bookOrder)

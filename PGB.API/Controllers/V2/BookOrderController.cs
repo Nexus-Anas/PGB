@@ -2,6 +2,8 @@
 using PGB.Application.BookOrders.Commands;
 using PGB.Application.DTOs.BookDTO;
 using Serilog;
+using System.Net;
+using static System.Net.WebRequestMethods;
 
 namespace PGB.API.Controllers.V2;
 
@@ -9,50 +11,66 @@ namespace PGB.API.Controllers.V2;
 [ApiController]
 public class BookOrderController : ApiControllerBase
 {
-    private IEnumerable<BookGetDTO>? _orderedBooks;
-    private IEnumerable<BookGetDTO>? _returnedBooks;
+    private readonly HttpClient _http;
     private readonly ILogger<BookOrderController> _logger;
-
-    public BookOrderController(ILogger<BookOrderController> logger)
+    public BookOrderController(ILogger<BookOrderController> logger, IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
-        _orderedBooks = Enumerable.Empty<BookGetDTO>();
-        _returnedBooks = Enumerable.Empty<BookGetDTO>();
+        _http = httpClientFactory.CreateClient();
     }
+
+
+
 
     [HttpPost("RegisterBookOrder")]
     public async Task<IActionResult> RegisterBookOrder(RegisterBookOrderCommand cmd)
     {
-        var result = await Mediator.Send(cmd);
-        var msg = result.Msg;
+        var (msg, books) = await Mediator.Send(cmd);
         Log.Information($"RegisterBookOrder function invoked.\nMessage status:\n{msg}");
-        _orderedBooks = result.Books;
-        return Ok(msg);
+
+        if (!books.Any())
+            return NotFound(msg);
+
+        var response = await GetBooksFromCatalogueApi(books);
+
+        if (response == HttpStatusCode.OK)
+            return Ok(msg);
+
+        return Ok(response);
     }
 
 
     [HttpPost("ReturnBookOrder")]
     public async Task<IActionResult> ReturnBookOrder(ReturnBookOrderCommand cmd)
     {
-        var result = await Mediator.Send(cmd);
-        var msg = result.Msg;
+        var (msg, books) = await Mediator.Send(cmd);
         Log.Information($"ReturnBookOrder function invoked.\nMessage status:\n{msg}");
-        _returnedBooks = result.Books;
-        return Ok(msg);
+
+        if (!books.Any())
+            return NotFound(msg);
+
+        var response = await ReturnBooksToCatalogueApi(books);
+
+        if (response == HttpStatusCode.OK)
+            return Ok(msg);
+
+        return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong, try again later");
     }
 
 
 
-    [HttpGet("GetOrderedBooks")]
-    public async Task<IActionResult> GetOrderedBooks()
+    private async Task<HttpStatusCode> GetBooksFromCatalogueApi(IEnumerable<BookGetDTO> books)
     {
-        return Ok(_orderedBooks);
+        var catalogueApiUrl = "https://localhost:44361/api/Library/GetOrderedBooks";
+        var response = await _http.PostAsJsonAsync(catalogueApiUrl, books);
+        return response.StatusCode;
+        //return await response.Content.ReadAsStringAsync();
     }
 
-
-    [HttpGet("GetReturnedBooks")]
-    public async Task<IActionResult> GetReturnedBooks()
+    private async Task<HttpStatusCode> ReturnBooksToCatalogueApi(IEnumerable<BookGetDTO> books)
     {
-        return Ok(_returnedBooks);
+        var catalogueApiUrl = "https://localhost:44361/api/Library/GetReturnedBooks";
+        var response = await _http.PostAsJsonAsync(catalogueApiUrl, books);
+        return response.StatusCode;
     }
 }

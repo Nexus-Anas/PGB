@@ -30,10 +30,13 @@ public class ReturnBookOrderService : IReturnBookOrderService
         if (bookOrder is null)
             return (Enumerable.Empty<BookGetDTO>(), CustomMessage.NoBookOrderFound());
 
+        bookOrder.SetReturnDate();
+        await _uow.CompleteAsync();
+
         if (bookOrder.BooksReturnedInExpectedDate())
             return (bookOrderPutDTO.Books, CustomMessage.InformBookReturned());
 
         await _userRestrictionHandler.HandleLateReturn(bookOrderPutDTO.UserId);
-        return (Enumerable.Empty<BookGetDTO>(), CustomMessage.UserBanned());
+        return (bookOrderPutDTO.Books, CustomMessage.UserBanned());
     }
 }

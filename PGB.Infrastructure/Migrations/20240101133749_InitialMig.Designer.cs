@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PGB.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using PGB.Infrastructure.Data;
 namespace PGB.Infrastructure.Migrations
 {
     [DbContext(typeof(MSSQL_DBC))]
-    partial class SqlServerDBCModelSnapshot : ModelSnapshot
+    [Migration("20240101133749_InitialMig")]
+    partial class InitialMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

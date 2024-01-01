@@ -9,6 +9,11 @@ public class BookOrder
     public DateTime ExpectedReturnDate { get; private set; }
     public DateTime? ReturnDate { get; private set; }
 
+    public BookOrder()
+    {
+        
+    }
+
     public BookOrder(int userId, IEnumerable<Book> books)
     {
         UserId = userId;

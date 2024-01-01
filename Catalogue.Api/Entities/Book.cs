@@ -1,4 +1,4 @@
-﻿namespace Authentication.API.Entities;
+﻿namespace Catalogue.Api.Entities;
 
 public class Book
 {
