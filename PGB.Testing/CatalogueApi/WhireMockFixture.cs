@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PGB.Testing.TestApiBooks
+namespace PGB.Testing.CatalogueApi;
+
+public class WhireMockFixture
 {
-    internal class WireMockServerFixture
-    {
-    }
 }

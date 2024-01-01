@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PGB.TestApiBooks\PGB.TestApiBooks.csproj" />
+    <ProjectReference Include="..\Catalogue.Api\Catalogue.Api.csproj" />
   </ItemGroup>
 
 </Project>

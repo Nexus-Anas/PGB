@@ -32,14 +32,14 @@ public class UserOrderController : ControllerBase
 
     private async Task<string> SendOrderToHandlerApi(UserOrder order)
     {
-        var handlerApiUrl = "https://localhost:44359/api/BookOrder/RegisterBookOrder";
+        var handlerApiUrl = "https://localhost:44364/gateway/BookOrder/RegisterBookOrder";
         var response = await _http.PostAsJsonAsync(handlerApiUrl, order);
         return await response.Content.ReadAsStringAsync();
     }
 
     private async Task<string> ReturnOrderToHandlerApi(UserOrder order)
     {
-        var handlerApiUrl = "https://localhost:44359/api/BookOrder/ReturnBookOrder";
+        var handlerApiUrl = "https://localhost:44364/gateway/BookOrder/ReturnBookOrder";
         var response = await _http.PostAsJsonAsync(handlerApiUrl, order);
         return await response.Content.ReadAsStringAsync();
     }

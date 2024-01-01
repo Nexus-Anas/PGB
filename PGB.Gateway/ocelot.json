@@ -1,0 +1,119 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:44364"
+  },
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/gateway/BookOrder/RegisterBookOrder",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/V2/BookOrder/RegisterBookOrder",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44359
+        }
+      ],
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "10s",
+        "PeriodTimespan": 10,
+        "Limit": 15
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 10
+      },
+      "HealthChecks": [
+        {
+          "Key": "BookOrder",
+          "Timeout": 5000,
+          "Uri": "/health"
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/BookOrder/ReturnBookOrder",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/V2/BookOrder/ReturnBookOrder",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44359
+        }
+      ],
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "10s",
+        "PeriodTimespan": 10,
+        "Limit": 15
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 10
+      },
+      "HealthChecks": [
+        {
+          "Key": "BookOrder",
+          "Timeout": 5000,
+          "Uri": "/health"
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Library/GetOrderedBooks",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/Library/GetOrderedBooks",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44361
+        }
+      ],
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "10s",
+        "PeriodTimespan": 10,
+        "Limit": 15
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 10
+      },
+      "HealthChecks": [
+        {
+          "Key": "Library",
+          "Timeout": 5000,
+          "Uri": "/health"
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/gateway/Library/GetReturnedBooks",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/Library/GetReturnedBooks",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44361
+        }
+      ],
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "10s",
+        "PeriodTimespan": 10,
+        "Limit": 15
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 10
+      },
+      "HealthChecks": [
+        {
+          "Key": "Library",
+          "Timeout": 5000,
+          "Uri": "/health"
+        }
+      ]
+    }
+  ]
+}
